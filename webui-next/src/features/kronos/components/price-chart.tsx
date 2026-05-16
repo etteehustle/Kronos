@@ -12,7 +12,10 @@ import {
   type ISeriesApi,
   type UTCTimestamp,
 } from "lightweight-charts";
-import type { PredictionResponse } from "./types";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import type { PredictionResponse } from "@/features/kronos/types";
 
 type PlotlyTrace = {
   x: string[];
@@ -166,45 +169,49 @@ export function PriceChart({ result }: PriceChartProps) {
   }, [result]);
 
   return (
-    <section className="rounded-lg border border-[#dce3ee] bg-white">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e7edf5] px-5 py-4">
+    <Card className="rounded-lg border-[#dce3ee] bg-white">
+      <CardHeader className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
         <div>
           <h2 className="text-lg font-semibold text-[#172033]">Biểu đồ dự báo</h2>
           <p className="mt-1 text-sm text-[#667085]">
             Kéo để pan, cuộn chuột để zoom, rê chuột để xem crosshair.
           </p>
         </div>
-        <button
-          className="h-9 rounded-md border border-[#cfd8e6] px-3 text-sm font-semibold text-[#344054] transition hover:bg-[#f3f6fb]"
+        <Button
+          variant="outline"
+          className="h-9 border-[#cfd8e6] text-[#344054] hover:bg-[#f3f6fb]"
           onClick={() => chartRef.current?.timeScale().fitContent()}
           type="button"
         >
           Vừa khung
-        </button>
-      </div>
+        </Button>
+      </CardHeader>
+      <Separator className="bg-[#e7edf5]" />
 
-      <div className="flex flex-wrap gap-4 px-5 py-3 text-sm font-medium text-[#344054]">
-        <span className="inline-flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#12b886]" />
-          Lịch sử
-        </span>
-        <span className="inline-flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#2563eb]" />
-          Dự báo
-        </span>
-        <span className="inline-flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#f97316]" />
-          Thực tế
-        </span>
-      </div>
-
-      <div ref={containerRef} className="h-[560px] w-full" />
-
-      {!result && (
-        <div className="flex h-[560px] items-center justify-center border-t border-[#eef2f7] text-sm text-[#667085]">
-          Chưa có dữ liệu dự báo. Tải mô hình, tải dữ liệu, rồi bấm bắt đầu dự báo.
+      <CardContent className="p-0">
+        <div className="flex flex-wrap gap-4 px-5 py-3 text-sm font-medium text-[#344054]">
+          <span className="inline-flex items-center gap-2">
+            <span className="size-2.5 rounded-full bg-[#12b886]" />
+            Lịch sử
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="size-2.5 rounded-full bg-[#2563eb]" />
+            Dự báo
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="size-2.5 rounded-full bg-[#f97316]" />
+            Thực tế
+          </span>
         </div>
-      )}
-    </section>
+
+        <div ref={containerRef} className="h-[560px] w-full" />
+
+        {!result && (
+          <div className="flex h-[560px] items-center justify-center border-t border-[#eef2f7] text-sm text-[#667085]">
+            Chưa có dữ liệu dự báo. Tải mô hình, tải dữ liệu, rồi bấm bắt đầu dự báo.
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

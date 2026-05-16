@@ -58,3 +58,7 @@ export type StatusMessage = {
   type: "info" | "success" | "warning" | "error";
   text: string;
 };
+
+export type ServerStatus = "checking" | "running" | "offline" | "loading-model";
+
+export type LoadingAction = "models" | "model" | "unload" | "data" | "predict" | null;
