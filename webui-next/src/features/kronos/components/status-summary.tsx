@@ -5,11 +5,11 @@ import type { DataInfo, ServerStatus } from "../types";
 function ServerStatusDot({ status }: { status: ServerStatus }) {
   const dotClass =
     status === "loading-model"
-      ? "bg-muted-foreground"
+      ? "bg-orange-500"
       : status === "running"
-        ? "bg-primary"
+        ? "bg-green-500"
         : status === "offline"
-          ? "bg-destructive"
+          ? "bg-red-500"
           : "bg-muted-foreground";
   const label =
     status === "loading-model"
