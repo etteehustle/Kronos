@@ -15,19 +15,19 @@ export function MetricsSummary({ metrics }: { metrics: PredictionMetrics }) {
         ["RMSE", metrics.rmse, "Căn sai số bình phương trung bình"],
         ["MAPE", metrics.mape, "Sai số phần trăm tuyệt đối trung bình"],
       ].map(([label, value, hint]) => (
-        <Card key={label} className="rounded-md border-[#e5ebf3] bg-[#f8fafc] py-4">
+        <Card key={label} className="rounded-md py-4">
           <CardContent>
-            <div className="text-xs font-semibold uppercase tracking-wide text-[#667085]">
+            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {label}
             </div>
-            <div className="mt-2 text-2xl font-semibold text-[#2563eb]">
+            <div className="mt-2 text-2xl font-semibold text-foreground">
               {typeof value === "number"
                 ? label === "MAPE"
                   ? `${formatNumber(value, 2)}%`
                   : formatNumber(value, 4)
                 : "--"}
             </div>
-            <div className="mt-1 text-xs text-[#667085]">{hint}</div>
+            <div className="mt-1 text-xs text-muted-foreground">{hint}</div>
           </CardContent>
         </Card>
       ))}

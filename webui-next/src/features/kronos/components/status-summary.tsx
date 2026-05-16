@@ -5,12 +5,12 @@ import type { DataInfo, ServerStatus } from "../types";
 function ServerStatusDot({ status }: { status: ServerStatus }) {
   const dotClass =
     status === "loading-model"
-      ? "bg-amber-500"
+      ? "bg-muted-foreground"
       : status === "running"
-        ? "bg-emerald-500"
+        ? "bg-primary"
         : status === "offline"
-          ? "bg-red-500"
-          : "bg-[#98a2b3]";
+          ? "bg-destructive"
+          : "bg-muted-foreground";
   const label =
     status === "loading-model"
       ? "Đang tải model"
@@ -25,7 +25,7 @@ function ServerStatusDot({ status }: { status: ServerStatus }) {
       <span
         aria-hidden="true"
         className={cn(
-          "size-2.5 shrink-0 rounded-full shadow-[0_0_0_3px_rgba(15,23,42,0.06)]",
+          "size-2.5 shrink-0 rounded-full ring-4 ring-muted",
           dotClass,
         )}
       />
@@ -47,27 +47,27 @@ export function StatusSummary({
 }) {
   return (
     <div className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
-      <Card className="rounded-md border-[#dce3ee] bg-white py-2">
+      <Card className="rounded-md py-2">
         <CardContent className="px-3">
-          <div className="text-xs font-medium text-[#667085]">Server</div>
+          <div className="text-xs font-medium text-muted-foreground">Server</div>
           <ServerStatusDot status={serverStatus} />
         </CardContent>
       </Card>
-      <Card className="rounded-md border-[#dce3ee] bg-white py-2">
+      <Card className="rounded-md py-2">
         <CardContent className="px-3">
-          <div className="text-xs font-medium text-[#667085]">Model</div>
+          <div className="text-xs font-medium text-muted-foreground">Model</div>
           <div className="mt-1 font-semibold">{modelLoaded ? "Đã tải" : "Chưa tải"}</div>
         </CardContent>
       </Card>
-      <Card className="rounded-md border-[#dce3ee] bg-white py-2">
+      <Card className="rounded-md py-2">
         <CardContent className="px-3">
-          <div className="text-xs font-medium text-[#667085]">Dữ liệu</div>
+          <div className="text-xs font-medium text-muted-foreground">Dữ liệu</div>
           <div className="mt-1 font-semibold">{dataInfo ? `${dataInfo.rows} dòng` : "--"}</div>
         </CardContent>
       </Card>
-      <Card className="rounded-md border-[#dce3ee] bg-white py-2">
+      <Card className="rounded-md py-2">
         <CardContent className="px-3">
-          <div className="text-xs font-medium text-[#667085]">Thiết bị</div>
+          <div className="text-xs font-medium text-muted-foreground">Thiết bị</div>
           <div className="mt-1 font-semibold uppercase">{selectedDevice}</div>
         </CardContent>
       </Card>

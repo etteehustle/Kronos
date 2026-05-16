@@ -27,7 +27,6 @@ import type {
   ServerStatus,
   StatusMessage,
 } from "../types";
-import { cn } from "@/lib/utils";
 import { ComparisonTable } from "./comparison-table";
 import { DataPanel } from "./data-panel";
 import { MetricsSummary } from "./metrics-summary";
@@ -43,13 +42,8 @@ function Status({ status }: { status: StatusMessage | null }) {
 
   return (
     <Alert
-      className={cn(
-        "rounded-md px-3 py-2",
-        status.type === "success" && "border-emerald-200 bg-emerald-50 text-emerald-800",
-        status.type === "info" && "border-blue-200 bg-blue-50 text-blue-800",
-        status.type === "warning" && "border-amber-200 bg-amber-50 text-amber-800",
-        status.type === "error" && "border-red-200 bg-red-50 text-red-800",
-      )}
+      className="rounded-md px-3 py-2"
+      variant={status.type === "error" ? "destructive" : "default"}
     >
       <Icon className="mt-0.5 size-4 shrink-0" />
       <AlertDescription className="text-current">{status.text}</AlertDescription>
@@ -278,14 +272,14 @@ export function KronosDashboard() {
   }
 
   return (
-    <main className="min-h-screen px-5 py-6 text-[#172033] lg:px-8">
+    <main className="min-h-screen bg-background px-5 py-6 text-foreground lg:px-8">
       <div className="mx-auto flex max-w-[1600px] flex-col gap-5">
-        <header className="flex flex-col gap-4 border-b border-[#dce3ee] pb-5 lg:flex-row lg:items-end lg:justify-between">
+        <header className="flex flex-col gap-4 border-b pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-[#111827] lg:text-3xl">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground lg:text-3xl">
               Kronos - Dự báo tài chính
             </h1>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-[#667085]">
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
               Giao diện Next.js mới cho workflow dự báo K-line: tải mô hình, chọn dữ liệu,
               sinh dự báo và so sánh với dữ liệu thực tế trên một màn hình.
             </p>
@@ -344,17 +338,17 @@ export function KronosDashboard() {
           <div className="flex min-w-0 flex-col gap-4">
             <PriceChart result={result} />
 
-            <Card className="rounded-lg border-[#dce3ee] bg-white">
+            <Card>
               <CardHeader className="flex flex-col gap-2 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-[#172033]">So sánh dự báo</h2>
-                  <p className="mt-1 text-sm text-[#667085]">
+                  <h2 className="text-lg font-semibold text-foreground">So sánh dự báo</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
                     {result?.prediction_type ?? "Chạy dự báo để xem sai số và bảng chi tiết."}
                   </p>
                 </div>
-                <BarChart3 className="size-5 text-[#2563eb]" />
+                <BarChart3 className="size-5 text-muted-foreground" />
               </CardHeader>
-              <Separator className="bg-[#e7edf5]" />
+              <Separator />
               <CardContent className="p-0">
                 <MetricsSummary metrics={metrics} />
                 <ComparisonTable result={result} />

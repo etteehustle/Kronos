@@ -35,7 +35,7 @@ export function ModelPanel({
   selectedModel: string;
 }) {
   return (
-    <Card className="rounded-lg border-[#dce3ee] bg-white">
+    <Card>
       <CardHeader>
         <CardTitle>
           <PanelTitle icon={<Cpu className="size-4" />} title="Mô hình" />
@@ -49,7 +49,7 @@ export function ModelPanel({
             onValueChange={onSelectedModelChange}
             value={selectedModel}
           >
-            <SelectTrigger className="h-11 w-full border-[#cfd8e6] bg-white text-[#172033]">
+            <SelectTrigger className="h-11 w-full">
               <SelectValue placeholder="Chọn mô hình" />
             </SelectTrigger>
             <SelectContent>
@@ -70,7 +70,7 @@ export function ModelPanel({
             onValueChange={onSelectedDeviceChange}
             value={selectedDevice}
           >
-            <SelectTrigger className="h-11 w-full border-[#cfd8e6] bg-white text-[#172033]">
+            <SelectTrigger className="h-11 w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -99,7 +99,7 @@ export function ModelPanel({
 
         <Button
           variant="destructive"
-          className="h-11 w-full border border-[#f3b7b7] bg-white"
+          className="h-11 w-full"
           disabled={!modelLoaded || loadingAction === "model" || loadingAction === "unload"}
           onClick={onUnloadModel}
           type="button"

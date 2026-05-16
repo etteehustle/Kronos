@@ -17,7 +17,7 @@ function InfoLabel({
   tooltip: string;
 }) {
   return (
-    <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#344054]">
+    <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
       <span>{children}</span>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -25,13 +25,13 @@ function InfoLabel({
             variant="ghost"
             size="icon-xs"
           aria-label={`Giải thích: ${tooltip}`}
-          className="size-5 rounded-full text-[#667085] hover:bg-[#eef4ff] hover:text-[#2563eb]"
+          className="size-5 rounded-full"
           type="button"
           >
             <Info />
           </Button>
         </TooltipTrigger>
-        <TooltipContent className="max-w-72 border border-[#dce3ee] bg-white text-[#344054] shadow-[0_12px_30px_rgba(15,23,42,0.14)]">
+        <TooltipContent className="max-w-72">
           {tooltip}
         </TooltipContent>
       </Tooltip>
@@ -71,7 +71,7 @@ export function PredictionPanel({
   windowPercent: number;
 }) {
   return (
-    <Card className="rounded-lg border-[#dce3ee] bg-white">
+    <Card>
       <CardHeader>
         <CardTitle>
           <PanelTitle icon={<SlidersHorizontal className="size-4" />} title="Dự báo" />
@@ -81,11 +81,11 @@ export function PredictionPanel({
         <div className="flex flex-col gap-5">
         <div>
           <div className="mb-2 flex items-center justify-between text-sm">
-            <span className="font-semibold text-[#344054]">Cửa sổ dữ liệu</span>
-            <span className="text-[#667085]">{WINDOW_SIZE} điểm</span>
+            <span className="font-semibold text-foreground">Cửa sổ dữ liệu</span>
+            <span className="text-muted-foreground">{WINDOW_SIZE} điểm</span>
           </div>
-          <div className="rounded-md border border-[#e5ebf3] bg-[#f8fafc] p-3">
-            <div className="mb-2 grid grid-cols-2 gap-2 text-xs text-[#667085]">
+          <div className="rounded-md border bg-muted/40 p-3">
+            <div className="mb-2 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
               <span>Bắt đầu: {formatDate(windowDates.startDate?.toISOString())}</span>
               <span>Kết thúc: {formatDate(windowDates.endDate?.toISOString())}</span>
             </div>
@@ -97,7 +97,7 @@ export function PredictionPanel({
               step={0.1}
               value={[Math.min(startPercent * 100, Math.max(100 - windowPercent, 0))]}
             />
-            <div className="mt-2 flex justify-between text-xs text-[#667085]">
+            <div className="mt-2 flex justify-between text-xs text-muted-foreground">
               <span>400 lịch sử</span>
               <span>120 dự báo</span>
             </div>
@@ -105,12 +105,12 @@ export function PredictionPanel({
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-md border border-[#e5ebf3] bg-[#f8fafc] p-3">
-            <div className="text-xs font-semibold text-[#667085]">Lookback</div>
+          <div className="rounded-md border bg-muted/40 p-3">
+            <div className="text-xs font-semibold text-muted-foreground">Lookback</div>
             <div className="mt-1 text-lg font-semibold">{LOOKBACK}</div>
           </div>
-          <div className="rounded-md border border-[#e5ebf3] bg-[#f8fafc] p-3">
-            <div className="text-xs font-semibold text-[#667085]">Pred len</div>
+          <div className="rounded-md border bg-muted/40 p-3">
+            <div className="text-xs font-semibold text-muted-foreground">Pred len</div>
             <div className="mt-1 text-lg font-semibold">{PRED_LEN}</div>
           </div>
         </div>
@@ -146,7 +146,7 @@ export function PredictionPanel({
             Số mẫu dự báo
           </InfoLabel>
           <Input
-            className="h-11 border-[#cfd8e6]"
+            className="h-11"
             max={5}
             min={1}
             onChange={(event) => onSampleCountChange(Number(event.target.value))}
@@ -156,7 +156,7 @@ export function PredictionPanel({
         </div>
 
         <Button
-          className="h-12 w-full bg-[#0f9f6e] hover:bg-[#087f5b]"
+          className="h-12 w-full"
           disabled={!canPredict || loadingAction === "predict"}
           onClick={onPredict}
           type="button"

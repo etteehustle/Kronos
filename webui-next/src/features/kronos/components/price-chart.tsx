@@ -8,6 +8,8 @@ import {
   CrosshairMode,
   LineStyle,
   type CandlestickData,
+  type ChartOptions,
+  type DeepPartial,
   type IChartApi,
   type ISeriesApi,
   type UTCTimestamp,
@@ -32,6 +34,66 @@ type PlotlyChartPayload = {
 
 type PriceChartProps = {
   result: PredictionResponse | null;
+};
+
+const tradingViewDark = {
+  background: "#131722",
+  panel: "#131722",
+  header: "#0f131d",
+  border: "#2A2E39",
+  crosshair: "#758696",
+  crosshairLabel: "#2A2E39",
+  grid: "#1f2430",
+  text: "#D1D4DC",
+  mutedText: "#8a91a3",
+
+  historyDown: "#EF5350",
+  historyUp: "#26A69A",
+  predictionDown: "#5B8DFF",
+  predictionUp: "#2962FF",
+  actualDown: "#FF5252",
+  actualUp: "#FF9800",
+};
+
+const tradingViewDarkOptions: DeepPartial<ChartOptions> = {
+  layout: {
+    background: { type: ColorType.Solid, color: tradingViewDark.background },
+    textColor: tradingViewDark.text,
+    fontFamily: "Geist, Segoe UI, sans-serif",
+  },
+  grid: {
+    vertLines: { color: tradingViewDark.grid },
+    horzLines: { color: tradingViewDark.grid },
+  },
+  rightPriceScale: {
+    borderColor: tradingViewDark.border,
+    scaleMargins: { top: 0.12, bottom: 0.1 },
+  },
+  leftPriceScale: {
+    borderColor: tradingViewDark.border,
+  },
+  timeScale: {
+    borderColor: tradingViewDark.border,
+    timeVisible: true,
+    secondsVisible: false,
+    rightOffset: 8,
+    barSpacing: 8,
+  },
+  crosshair: {
+    mode: CrosshairMode.Normal,
+    vertLine: {
+      color: tradingViewDark.crosshair,
+      style: LineStyle.Dashed,
+      width: 1,
+      labelBackgroundColor: tradingViewDark.crosshairLabel,
+    },
+    horzLine: {
+      color: tradingViewDark.crosshair,
+      style: LineStyle.Dashed,
+      width: 1,
+      labelBackgroundColor: tradingViewDark.crosshairLabel,
+    },
+  },
 };
 
 function toCandles(trace: PlotlyTrace): CandlestickData<UTCTimestamp>[] {
@@ -62,44 +124,13 @@ export function PriceChart({ result }: PriceChartProps) {
 
     const container = containerRef.current;
     container.innerHTML = "";
+    container.style.backgroundColor = tradingViewDark.background;
     seriesRef.current = [];
 
     const chart = createChart(container, {
       autoSize: true,
       height: 560,
-      layout: {
-        background: { type: ColorType.Solid, color: "#ffffff" },
-        textColor: "#344054",
-        fontFamily: "Geist, Segoe UI, sans-serif",
-      },
-      grid: {
-        vertLines: { color: "#edf1f7" },
-        horzLines: { color: "#edf1f7" },
-      },
-      rightPriceScale: {
-        borderColor: "#d9e1ec",
-        scaleMargins: { top: 0.12, bottom: 0.1 },
-      },
-      timeScale: {
-        borderColor: "#d9e1ec",
-        timeVisible: true,
-        secondsVisible: false,
-        rightOffset: 8,
-        barSpacing: 8,
-      },
-      crosshair: {
-        mode: CrosshairMode.Normal,
-        vertLine: {
-          color: "#64748b",
-          style: LineStyle.Dashed,
-          width: 1,
-        },
-        horzLine: {
-          color: "#64748b",
-          style: LineStyle.Dashed,
-          width: 1,
-        },
-      },
+      ...tradingViewDarkOptions,
       handleScroll: {
         mouseWheel: true,
         pressedMouseMove: true,
@@ -114,31 +145,32 @@ export function PriceChart({ result }: PriceChartProps) {
     });
 
     chartRef.current = chart;
+    chart.applyOptions(tradingViewDarkOptions);
 
     const styles = [
       {
-        upColor: "#12b886",
-        downColor: "#ef4444",
-        borderUpColor: "#12b886",
-        borderDownColor: "#ef4444",
-        wickUpColor: "#12b886",
-        wickDownColor: "#ef4444",
+        upColor: tradingViewDark.historyUp,
+        downColor: tradingViewDark.historyDown,
+        borderUpColor: tradingViewDark.historyUp,
+        borderDownColor: tradingViewDark.historyDown,
+        wickUpColor: tradingViewDark.historyUp,
+        wickDownColor: tradingViewDark.historyDown,
       },
       {
-        upColor: "#2563eb",
-        downColor: "#1d4ed8",
-        borderUpColor: "#2563eb",
-        borderDownColor: "#1d4ed8",
-        wickUpColor: "#2563eb",
-        wickDownColor: "#1d4ed8",
+        upColor: tradingViewDark.predictionUp,
+        downColor: tradingViewDark.predictionDown,
+        borderUpColor: tradingViewDark.predictionUp,
+        borderDownColor: tradingViewDark.predictionDown,
+        wickUpColor: tradingViewDark.predictionUp,
+        wickDownColor: tradingViewDark.predictionDown,
       },
       {
-        upColor: "#f97316",
-        downColor: "#dc2626",
-        borderUpColor: "#f97316",
-        borderDownColor: "#dc2626",
-        wickUpColor: "#f97316",
-        wickDownColor: "#dc2626",
+        upColor: tradingViewDark.actualUp,
+        downColor: tradingViewDark.actualDown,
+        borderUpColor: tradingViewDark.actualUp,
+        borderDownColor: tradingViewDark.actualDown,
+        wickUpColor: tradingViewDark.actualUp,
+        wickDownColor: tradingViewDark.actualDown,
       },
     ];
 
@@ -160,6 +192,9 @@ export function PriceChart({ result }: PriceChartProps) {
     });
 
     chart.timeScale().fitContent();
+    window.requestAnimationFrame(() => {
+      chart.applyOptions(tradingViewDarkOptions);
+    });
 
     return () => {
       chart.remove();
@@ -169,45 +204,79 @@ export function PriceChart({ result }: PriceChartProps) {
   }, [result]);
 
   return (
-    <Card className="rounded-lg border-[#dce3ee] bg-white">
-      <CardHeader className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
+    <Card 
+      className="overflow-hidden border"
+      style={{
+        backgroundColor: tradingViewDark.panel,
+        borderColor: tradingViewDark.border,
+      }}>
+      <CardHeader 
+        className="flex flex-wrap items-center justify-between gap-3 px-5 py-4" 
+        style={{
+          backgroundColor: tradingViewDark.header,
+          borderColor: tradingViewDark.border,
+        }}>
         <div>
-          <h2 className="text-lg font-semibold text-[#172033]">Biểu đồ dự báo</h2>
-          <p className="mt-1 text-sm text-[#667085]">
+          <h2 className="text-lg font-semibold" style={{ color: tradingViewDark.text }}>
+            Biểu đồ dự báo
+          </h2>
+          <p className="mt-1 text-sm" style={{ color: tradingViewDark.mutedText }}>
             Kéo để pan, cuộn chuột để zoom, rê chuột để xem crosshair.
           </p>
         </div>
         <Button
           variant="outline"
-          className="h-9 border-[#cfd8e6] text-[#344054] hover:bg-[#f3f6fb]"
+          className="h-9"
           onClick={() => chartRef.current?.timeScale().fitContent()}
           type="button"
         >
           Vừa khung
         </Button>
       </CardHeader>
-      <Separator className="bg-[#e7edf5]" />
+      <Separator style={{ backgroundColor: tradingViewDark.border }} />
 
-      <CardContent className="p-0">
-        <div className="flex flex-wrap gap-4 px-5 py-3 text-sm font-medium text-[#344054]">
+      <CardContent className="p-0" style={{ backgroundColor: tradingViewDark.background }}>
+        <div
+          className="flex flex-wrap gap-4 px-5 py-3 text-sm font-medium"
+          style={{
+            backgroundColor: tradingViewDark.header,
+            color: tradingViewDark.mutedText,
+            borderBottom: `1px solid ${tradingViewDark.border}`,
+          }}>
           <span className="inline-flex items-center gap-2">
-            <span className="size-2.5 rounded-full bg-[#12b886]" />
+            <span
+              className="size-2.5 rounded-full"
+              style={{ backgroundColor: tradingViewDark.historyUp }}
+            />
             Lịch sử
           </span>
           <span className="inline-flex items-center gap-2">
-            <span className="size-2.5 rounded-full bg-[#2563eb]" />
+            <span
+              className="size-2.5 rounded-full"
+              style={{ backgroundColor: tradingViewDark.predictionUp }}
+            />
             Dự báo
           </span>
           <span className="inline-flex items-center gap-2">
-            <span className="size-2.5 rounded-full bg-[#f97316]" />
+            <span
+              className="size-2.5 rounded-full"
+              style={{ backgroundColor: tradingViewDark.actualUp }}
+            />
             Thực tế
           </span>
         </div>
 
-        <div ref={containerRef} className="h-[560px] w-full" />
+        <div
+          ref={containerRef}
+          className="h-[560px] w-full overflow-hidden"
+          style={{ backgroundColor: tradingViewDark.background }}
+        />
 
         {!result && (
-          <div className="flex h-[560px] items-center justify-center border-t border-[#eef2f7] text-sm text-[#667085]">
+          <div
+            className="flex h-[560px] items-center justify-center border-t text-sm"
+            style={{ backgroundColor: tradingViewDark.background, color: tradingViewDark.text }}
+          >
             Chưa có dữ liệu dự báo. Tải mô hình, tải dữ liệu, rồi bấm bắt đầu dự báo.
           </div>
         )}

@@ -30,7 +30,7 @@ export function DataPanel({
   selectedFile: string;
 }) {
   return (
-    <Card className="rounded-lg border-[#dce3ee] bg-white">
+    <Card>
       <CardHeader>
         <CardTitle>
           <PanelTitle icon={<Database className="size-4" />} title="Dữ liệu" />
@@ -44,7 +44,7 @@ export function DataPanel({
             onValueChange={(value) => onSelectedFileChange(value === "__none__" ? "" : value)}
             value={selectedFile || "__none__"}
           >
-            <SelectTrigger className="h-11 w-full border-[#cfd8e6] bg-white text-[#172033]">
+            <SelectTrigger className="h-11 w-full">
               <SelectValue placeholder="Chọn file" />
             </SelectTrigger>
             <SelectContent>
@@ -62,7 +62,7 @@ export function DataPanel({
 
         <Button
           variant="outline"
-          className="h-11 w-full border-[#cfd8e6] bg-[#f8fafc] text-[#344054] hover:bg-[#eef4ff]"
+          className="h-11 w-full"
           disabled={loadingAction === "data" || !selectedFile}
           onClick={onLoadData}
           type="button"
@@ -76,23 +76,23 @@ export function DataPanel({
         </Button>
 
         {dataInfo && (
-          <dl className="grid grid-cols-2 gap-3 rounded-md border border-[#e5ebf3] bg-[#f8fafc] p-3 text-sm">
+          <dl className="grid grid-cols-2 gap-3 rounded-md border bg-muted/40 p-3 text-sm">
             <div>
-              <dt className="text-xs font-semibold text-[#667085]">Số dòng</dt>
+              <dt className="text-xs font-semibold text-muted-foreground">Số dòng</dt>
               <dd className="mt-1 font-semibold">{dataInfo.rows}</dd>
             </div>
             <div>
-              <dt className="text-xs font-semibold text-[#667085]">Khung</dt>
+              <dt className="text-xs font-semibold text-muted-foreground">Khung</dt>
               <dd className="mt-1 font-semibold">{dataInfo.timeframe}</dd>
             </div>
             <div className="col-span-2">
-              <dt className="text-xs font-semibold text-[#667085]">Thời gian</dt>
+              <dt className="text-xs font-semibold text-muted-foreground">Thời gian</dt>
               <dd className="mt-1 font-medium">
                 {formatDate(dataInfo.start_date)} - {formatDate(dataInfo.end_date)}
               </dd>
             </div>
             <div className="col-span-2">
-              <dt className="text-xs font-semibold text-[#667085]">Khoảng giá</dt>
+              <dt className="text-xs font-semibold text-muted-foreground">Khoảng giá</dt>
               <dd className="mt-1 font-medium">
                 {formatNumber(dataInfo.price_range.min)} - {formatNumber(dataInfo.price_range.max)}
               </dd>
