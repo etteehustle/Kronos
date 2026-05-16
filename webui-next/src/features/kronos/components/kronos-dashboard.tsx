@@ -280,7 +280,7 @@ export function KronosDashboard() {
               Kronos - Dự báo tài chính
             </h1>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
-              Giao diện Next.js mới cho workflow dự báo K-line: tải mô hình, chọn dữ liệu,
+              Workflow dự báo K-line: tải mô hình, chọn dữ liệu,
               sinh dự báo và so sánh với dữ liệu thực tế trên một màn hình.
             </p>
           </div>

@@ -37,10 +37,10 @@ type PriceChartProps = {
 };
 
 const tradingViewDark = {
-  background: "#131722",
-  panel: "#131722",
-  header: "#0f131d",
-  border: "#2A2E39",
+  background: "#171717",
+  panel: "#171717",
+  header: "#171717",
+  border: "#222222",
   crosshair: "#758696",
   crosshairLabel: "#2A2E39",
   grid: "#1f2430",
