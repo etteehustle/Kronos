@@ -1,4 +1,4 @@
-import type { DataFile, DataInfo, ModelInfo, PredictionResponse, ServerHealth } from "./types";
+import type { DataFile, DataInfo, ModelInfo, PredictionResponse, ServerHealth } from "../types";
 
 type ApiError = {
   error?: string;
