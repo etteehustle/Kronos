@@ -1,6 +1,7 @@
 $ErrorActionPreference = "Stop"
 
-$root = Split-Path -Parent $MyInvocation.MyCommand.Path
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$root = Split-Path -Parent $scriptDir
 $backend = Join-Path $root "webui"
 $frontend = Join-Path $root "webui-next"
 
@@ -21,6 +22,18 @@ if (-not (Test-Command "python")) {
 
 if (-not (Test-Command "npm")) {
     Write-Host "npm was not found on PATH. Install Node.js or add npm to PATH first." -ForegroundColor Red
+    pause
+    exit 1
+}
+
+if (-not (Test-Path -LiteralPath $backend)) {
+    Write-Host "Backend directory was not found: $backend" -ForegroundColor Red
+    pause
+    exit 1
+}
+
+if (-not (Test-Path -LiteralPath $frontend)) {
+    Write-Host "Frontend directory was not found: $frontend" -ForegroundColor Red
     pause
     exit 1
 }
