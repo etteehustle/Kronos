@@ -5,6 +5,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 BACKEND_DIR="$ROOT_DIR/webui"
 FRONTEND_DIR="$ROOT_DIR/webui-next"
+LOCAL_PYTHON="$ROOT_DIR/.venv/bin/python"
+LOCAL_NODE_DIR="$ROOT_DIR/.tools/node/bin"
 BACKEND_LOG="$BACKEND_DIR/server.log"
 BACKEND_ERR="$BACKEND_DIR/server.err.log"
 FRONTEND_LOG="$FRONTEND_DIR/next-server.log"
@@ -39,7 +41,9 @@ open_url() {
 echo "Starting Kronos..."
 echo "=================="
 
-if command_exists python3; then
+if [ -x "$LOCAL_PYTHON" ]; then
+  PYTHON_BIN="$LOCAL_PYTHON"
+elif command_exists python3; then
   PYTHON_BIN="python3"
 elif command_exists python; then
   PYTHON_BIN="python"
@@ -48,8 +52,19 @@ else
   exit 1
 fi
 
-if ! command_exists npm; then
-  echo "npm was not found. Install Node.js/npm first."
+if [ -x "$LOCAL_NODE_DIR/node" ]; then
+  NODE_BIN="$LOCAL_NODE_DIR/node"
+  NPM_BIN="$LOCAL_NODE_DIR/npm"
+elif command_exists node; then
+  NODE_BIN="node"
+  NPM_BIN="npm"
+else
+  NODE_BIN=""
+  NPM_BIN=""
+fi
+
+if [ -z "$NODE_BIN" ]; then
+  echo "Node.js was not found. Install Node.js/npm first."
   exit 1
 fi
 
@@ -69,9 +84,10 @@ else
   echo "Starting Kronos backend API on http://localhost:7070 ..."
   (
     cd "$BACKEND_DIR"
-    "$PYTHON_BIN" app.py >>"$BACKEND_LOG" 2>>"$BACKEND_ERR"
-  ) &
-  echo "Backend PID: $!"
+    nohup "$PYTHON_BIN" app.py >>"$BACKEND_LOG" 2>>"$BACKEND_ERR" </dev/null &
+    echo "$!" > "$BACKEND_DIR/server.pid"
+  )
+  echo "Backend PID: $(cat "$BACKEND_DIR/server.pid")"
 fi
 
 sleep 4
@@ -82,9 +98,17 @@ else
   echo "Starting Kronos web UI on http://localhost:3000 ..."
   (
     cd "$FRONTEND_DIR"
-    npm run dev -- --hostname 0.0.0.0 --port 3000 >>"$FRONTEND_LOG" 2>>"$FRONTEND_ERR"
-  ) &
-  echo "Frontend PID: $!"
+    if [ -x "$NPM_BIN" ] || command_exists "$NPM_BIN"; then
+      nohup env PATH="$LOCAL_NODE_DIR:$PATH" "$NPM_BIN" run dev -- --hostname 0.0.0.0 --port 3000 >>"$FRONTEND_LOG" 2>>"$FRONTEND_ERR" </dev/null &
+    elif [ -f "$FRONTEND_DIR/node_modules/next/dist/bin/next" ]; then
+      nohup "$NODE_BIN" "$FRONTEND_DIR/node_modules/next/dist/bin/next" dev --hostname 0.0.0.0 --port 3000 >>"$FRONTEND_LOG" 2>>"$FRONTEND_ERR" </dev/null &
+    else
+      echo "npm was not found and frontend dependencies are missing. Install Node.js/npm, then run npm install in $FRONTEND_DIR." >>"$FRONTEND_ERR"
+      exit 1
+    fi
+    echo "$!" > "$FRONTEND_DIR/server.pid"
+  )
+  echo "Frontend PID: $(cat "$FRONTEND_DIR/server.pid")"
 fi
 
 sleep 6
